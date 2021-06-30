@@ -1,0 +1,63 @@
+<%- include("./Layout/Header"); -%>
+<h2>Login</h2>
+<form id="login_form">
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">Email</label>
+        <div class="col-sm-10">
+            <input
+                type="text"
+                class="form-control"
+                placeholder="email@example.com"
+                name="email"
+                required
+            />
+            <div class="error email" style="color: red;"></div>
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label class="col-sm-2 col-form-label">Password</label>
+        <div class="col-sm-10">
+            <input type="password" class="form-control" name="password" />
+            <div class="error password" style="color: red;"></div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>
+<script>
+    const form = document.querySelector("#login_form");
+    const emailError = document.querySelector(".error.email");
+    const passwordError = document.querySelector(".error.password");
+
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        //reset error
+        // emailError.textContent = "";
+        // passwordError.textContent = "";
+
+        const email = form.email.value;
+        const password = form.password.value;
+        // console.log(email, password);
+
+        try {
+            const res = await fetch("/login", {
+                method: "POST",
+                body: JSON.stringify({ email, password }),
+                headers: { "Content-Type": "application/json" },
+            });
+            const data = await res.json();
+            console.log(data);
+            if (data.errors) {
+                emailError.textContent = data.errors.email;
+                passwordError.textContent = data.errors.password;
+            }
+            if(data.user){
+                location.assign("/");
+            }
+        } catch (err) {
+            console.log("catch login ejs", err);
+        }
+    });
+</script>
+<%- include("./Layout/Footer"); -%>

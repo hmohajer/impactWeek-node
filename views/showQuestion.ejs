@@ -1,0 +1,84 @@
+<%- include("./Layout/Header") %>
+
+<div class="row">
+    <div class="col-6"><%- include("./common/Post",{post}) %></div>
+    <div class="col-4 alignment-content-end">
+        <div><%= post.updatedAt %></div>
+        <a
+            type="button"
+            href="/question/delete/<%= post._id %>"
+            class="btn btn-danger"
+            >Delete question</a
+        >
+        <!-- <a type="button"  href="/question/edit/<%= post._id %>" class="btn btn-primary">Edit Question</a> -->
+    </div>
+</div>
+<div class="row">
+    
+    <form id="addComment_form" class="container row">
+        <div class="mb-3 col-8">
+            <textarea
+            name="commentBody"
+            class="form-control"
+            placeholder="enter your comment"
+            rows="2"
+            ></textarea>
+            <div style="color: #ff0000" class="error comment"></div>
+            <input
+            name="userId"
+            type="hidden"
+            class="form-control"
+            value=" <%= user._id %> "
+            />
+            <input
+            name="questionId"
+            type="hidden"
+            class="form-control"
+            value=" <%= post._id %>"
+            />
+        </div>
+        <div class=" col-4">
+            <button type="submit" class="btn btn-primary">add comment</button>
+        </div>
+    </form>
+</div>
+<% comments.map(comment => {%>
+<div class="row">
+    <div class="col-8"><%- include("./common/Comment",{comment}) %></div>
+    <div class="col-4"></div>
+</div>
+<%}) %>
+
+
+<script>
+    const form = document.querySelector("#addComment_form");
+    // const commentError = document.querySelector(".error.comment");
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const commentBody = form.commentBody.value;
+        const userId = form.userId.value;
+        const questionId= form.questionId.value;
+
+        
+        try {
+            const res = await fetch("/addComment", {
+                method: "POST",
+                body: JSON.stringify({ commentBody, userId, questionId }),
+                headers: { "Content-Type": "application/json" },
+            });
+            const data = await res.json();
+            console.log(data);
+            // if (data.errors) {
+            //     emailError.textContent = data.errors.email;
+            //     passwordError.textContent = data.errors.password;
+            // }
+            if(data){  //.comment
+                location.assign("/question/<%= post._id %>");
+            }
+        } catch (err) {
+            console.log("catch comment  ejs", err);
+        }
+    });
+</script>
+<%- include("./Layout/Footer") %>

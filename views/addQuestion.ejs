@@ -1,0 +1,42 @@
+<%- include("./Layout/Header"); -%>
+
+<form action="/addQuestion" method="POST" class="container">
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label"
+            >question title</label
+        >
+        <input
+            name="title"
+            type="text"
+            class="form-control"
+            placeholder="question title"
+        />
+        <p style="color: red"><%= err && err.name && err.name.message %></p>
+    </div>
+ 
+    <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label"
+            >description</label
+        >
+        <textarea
+            name="description"
+            class="form-control"
+            placeholder="description"
+            rows="3"
+        ></textarea>
+        <p style="color: red">
+            <%= err && err.message && "THE TEXT MUST BE SHORTER THAN 40 CHARACTER AND NOT EMPTY!" %>
+        </p>
+    </div>
+    <input
+        name="userid"
+        type="hidden"
+        class="form-control"
+        value=" <%= user._id %> "
+    />
+    <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary">add question</button>
+    </div>
+</form>
+
+<%- include("./Layout/Footer"); -%>

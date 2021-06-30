@@ -1,0 +1,18 @@
+<%- include("./Layout/Header"); -%> 
+
+<div >
+    <a href="/addQuestion" class="btn btn-success">add Question</a>
+    
+</div>
+
+<% question.map(post => {%>
+<hr />
+<div class="row">
+    <div class="col-6"><%- include("./common/Post",{post}) %></div>
+    <div class="col-4 alignment-content-end">
+        <div><a href="/question/<%= post._id  %>">See More...</a></div>
+        <div><%= post.updatedAt %></div>
+    </div>
+</div>
+<%}) %>
+<%- include("./Layout/Footer"); -%> 
